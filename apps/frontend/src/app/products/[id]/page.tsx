@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { CatalogApiError, getProduct } from "@/lib/catalog";
 import { ImageIcon } from "@/components/icons";
 import { WishlistButton } from "@/components/wishlist-button";
+import { productStructuredData } from "@/lib/structured-data";
 
 export const dynamic = "force-dynamic";
 
@@ -31,15 +32,7 @@ export default async function ProductPage({ params }: Props) {
     if (error instanceof CatalogApiError && error.status === 404) notFound();
     return <main className="page-main"><section className="catalog-message"><h1>Product unavailable</h1><p>Please try again shortly.</p><Link href="/">Back to products</Link></section></main>;
   }
-  const siteUrl = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-  const structuredData = [
-    { "@context": "https://schema.org", "@type": "Product", name: product.title, description: product.description, ...(product.images[0] ? { image: `${siteUrl}${product.images[0].url}` } : {}), offers: { "@type": "Offer", price: product.price, priceCurrency: "USD" } },
-    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Shop", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: product.category.name, item: `${siteUrl}/?category=${product.category.slug}` },
-      { "@type": "ListItem", position: 3, name: product.title, item: `${siteUrl}/products/${product.id}` },
-    ] },
-  ];
+  const structuredData = productStructuredData(product);
   return <main className="page-main product-page">
     <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Shop</Link><span aria-hidden="true">/</span><span>{product.category.name}</span></nav>
     <div className="product-page-layout">

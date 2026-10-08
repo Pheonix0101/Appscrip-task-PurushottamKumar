@@ -4,12 +4,11 @@ import { redirect } from "next/navigation";
 import { ListingControls } from "@/components/listing-controls";
 import { ProductCard } from "@/components/product-card";
 import { CatalogApiError, getCategories, getFacets, getListing, queryFromSearchParams } from "@/lib/catalog";
+import { listingStructuredData, siteOrigin } from "@/lib/structured-data";
 
 export const dynamic = "force-dynamic";
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
-const siteUrl = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-
 function canonicalUrl(query: URLSearchParams) {
   const params = new URLSearchParams();
   const keys = [...new Set(query.keys())].sort();
@@ -18,17 +17,26 @@ function canonicalUrl(query: URLSearchParams) {
     if ((key === "page" && values[0] === "1") || (key === "sort" && values[0] === "recommended") || (key === "limit" && values[0] === "9")) continue;
     values.forEach((value) => params.append(key, value));
   }
-  return `${siteUrl}/${params.size ? `?${params}` : ""}`;
+  return `${siteOrigin}/${params.size ? `?${params}` : ""}`;
 }
 
-export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
-  const params = queryFromSearchParams(await searchParams);
+function listingPageDetails(params: URLSearchParams) {
   const category = params.get("category")?.replace(/-/g, " ");
   const title = category ? `${category.replace(/\b\w/g, (letter) => letter.toUpperCase())} products` : "Discover our products";
   const description = category
     ? `Browse ${category} at mettā muse. Filter, sort, and discover thoughtfully made pieces.`
     : "Discover thoughtfully made bags, accessories, toys, and home pieces at mettā muse.";
-  return { title, description, alternates: { canonical: canonicalUrl(params) }, openGraph: { title, description, url: canonicalUrl(params), type: "website" } };
+  return { title, description, url: canonicalUrl(params) };
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const details = listingPageDetails(queryFromSearchParams(await searchParams));
+  return {
+    title: details.title,
+    description: details.description,
+    alternates: { canonical: details.url },
+    openGraph: { title: details.title, description: details.description, url: details.url, type: "website" },
+  };
 }
 
 function pageHref(query: URLSearchParams, page: number) {
@@ -56,6 +64,7 @@ function paginationItems(current: number, total: number): (number | "ellipsis")[
 
 export default async function HomePage({ searchParams }: PageProps) {
   const query = queryFromSearchParams(await searchParams);
+  const details = listingPageDetails(query);
   let catalog;
   let categories;
   let facets;
@@ -72,24 +81,7 @@ export default async function HomePage({ searchParams }: PageProps) {
     redirect(pageHref(query, catalog.pagination.totalPages));
   }
 
-  const jsonLd = catalog ? {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Discover our products",
-    numberOfItems: catalog.pagination.total,
-    itemListElement: catalog.data.map((product, index) => ({
-      "@type": "ListItem",
-      position: (catalog.pagination.page - 1) * catalog.pagination.limit + index + 1,
-      item: {
-        "@type": "Product",
-        name: product.title,
-        description: product.description,
-        url: `${siteUrl}/products/${product.id}`,
-        ...(product.images[0] ? { image: `${siteUrl}${product.images[0].url}` } : {}),
-        offers: { "@type": "Offer", price: product.price, priceCurrency: "USD" },
-      },
-    })),
-  } : null;
+  const jsonLd = catalog ? listingStructuredData({ ...details, products: catalog.data }) : null;
 
   return <main className="page-main">
     <section className="hero" aria-labelledby="page-title">
