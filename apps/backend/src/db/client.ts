@@ -4,7 +4,7 @@ const url = process.env.SUPABASE_URL;
 const secretKey = process.env.SUPABASE_SECRET_KEY;
 
 if (!url || !secretKey) {
-  throw new Error("SUPABASE_URL and SUPABASE_SECRET_KEY are required in apps/backend/.env");
+  throw new Error("SUPABASE_URL and SUPABASE_SECRET_KEY are required");
 }
 
 export const supabase = createClient(url, secretKey, {

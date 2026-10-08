@@ -34,6 +34,18 @@ The footer matches the supplied reference layout. Newsletter signup saves an ema
 
 Run `npm run typecheck`, `npm test`, and `npm run build` to check the code.
 
+## Deploy on Render and Netlify
+
+The frontend uses Next.js server rendering and a server-side API route, so deploy it as a **Next.js site** on Netlify, not as a static export. Netlify's Next.js adapter handles those routes. The API is an Express **Web Service** on Render. Both hosts should build from the repository root so npm can use the root lockfile and workspaces.
+
+1. Prepare Supabase: run `apps/backend/supabase/schema.sql` and the migration in `apps/backend/supabase/migrations/` in the target project. Seed the demo catalog once from your local checkout with `npm run db:seed` using that project's backend environment variables. Confirm `npm run db:check` succeeds. The seed is demo content; replace it before publishing a real catalog.
+2. In Render, create a **Web Service** from this repository. Leave **Root Directory** empty. Set **Build Command** to `npm ci && npm run build -w @appscrip/backend`, **Start Command** to `npm run start -w @appscrip/backend`, and **Health Check Path** to `/health`. The root `.nvmrc` selects Node 22. Render supplies `PORT` automatically.
+3. Set these Render environment variables in its dashboard: `SUPABASE_URL` and `SUPABASE_SECRET_KEY` for the target Supabase project, plus `WEB_ORIGIN` set to the final Netlify site origin (for example, `https://your-site.netlify.app`). Keep the secret key on Render only. Once Render deploys, check `https://your-api.onrender.com/health` and `https://your-api.onrender.com/products`.
+4. In Netlify, import the same repository and select `apps/frontend` as the **Package directory**. Leave **Base directory** empty. The checked-in `apps/frontend/netlify.toml` sets the build command and publish directory; if Netlify asks you to enter them manually, use `npm run build -w @appscrip/frontend` and `apps/frontend/.next`. Do not enable static export.
+5. Set these Netlify environment variables in its dashboard, available to both builds and functions: `API_BASE_URL=https://your-api.onrender.com` and `SITE_URL=https://your-site.netlify.app`. Use each origin without a trailing slash. If the first deploy ran before these values were set, redeploy after setting them. Open the site, a product detail page, and submit a test newsletter address to verify the full path. If you later add a custom domain, update `SITE_URL` and `WEB_ORIGIN` and redeploy.
+
+The frontend currently gives the API eight seconds to respond. Render Free web services spin down after inactivity and may take around a minute to wake, so the first catalog request can fail on that plan. Use an always-on Render instance for reliable public traffic. The `/health` endpoint checks that the API process is running; checking `/products` also verifies the Supabase connection and catalog data.
+
 ## API
 
 | Endpoint | Description |
