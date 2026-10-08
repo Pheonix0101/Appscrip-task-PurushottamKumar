@@ -1,6 +1,7 @@
 import type { Product } from "./catalog";
+import { siteOrigin } from "./site-config";
 
-export const siteOrigin = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+export { siteOrigin };
 
 const homeUrl = siteOrigin + "/";
 const websiteId = homeUrl + "#website";

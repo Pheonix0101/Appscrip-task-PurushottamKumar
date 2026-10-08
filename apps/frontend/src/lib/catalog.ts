@@ -1,3 +1,5 @@
+import { apiBase } from "./site-config";
+
 export type Category = { id: number; name: string; slug: string };
 export type Facet = { key: string; label: string; options: string[] };
 export type Product = {
@@ -16,8 +18,6 @@ export type ProductList = {
   data: Product[];
   pagination: { page: number; limit: number; total: number; totalPages: number };
 };
-
-const apiBase = process.env.API_BASE_URL ?? "http://localhost:4000";
 
 export class CatalogApiError extends Error {
   constructor(public status: number) {

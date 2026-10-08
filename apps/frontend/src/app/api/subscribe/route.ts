@@ -1,4 +1,4 @@
-const apiBase = process.env.API_BASE_URL ?? "http://localhost:4000";
+import { apiBase } from "@/lib/site-config";
 
 export async function POST(request: Request) {
   const body = await request.text();

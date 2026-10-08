@@ -21,7 +21,7 @@ Use Node.js 22.12 or later, npm, and a Supabase project. No local database servi
 
 1. Run `npm install`.
 2. In the Supabase Dashboard, open **SQL Editor** and run [`apps/backend/supabase/schema.sql`](./apps/backend/supabase/schema.sql), then [`apps/backend/supabase/migrations/20261008_add_client_subscriptions.sql`](./apps/backend/supabase/migrations/20261008_add_client_subscriptions.sql). The first creates the catalog; the second creates the newsletter table named `Client`. Both files are safe to rerun.
-3. Create `apps/backend/.env` from `apps/backend/.env.example` if it does not exist. Set `SUPABASE_URL` and `SUPABASE_SECRET_KEY`. `WEB_ORIGIN` defaults to `http://localhost:3000`; `PORT` defaults to `4000`.
+3. Create `apps/backend/.env` from `apps/backend/.env.example` if it does not exist. Set `SUPABASE_URL` and `SUPABASE_SECRET_KEY`. The Netlify site is allowed by CORS; `WEB_ORIGIN` can add other origins and defaults to `http://localhost:3000` in development. `PORT` defaults to `4000`.
 4. Create `apps/frontend/.env.local` from `apps/frontend/.env.local.example` if needed. For local development, set `API_BASE_URL=http://localhost:4000` and `SITE_URL=http://localhost:3000`.
 5. Run `npm run db:check`, then `npm run db:seed`.
 6. Start separate terminals with `npm run dev:backend` and `npm run dev:frontend`.
@@ -40,9 +40,9 @@ The frontend uses Next.js server rendering and a server-side API route, so deplo
 
 1. Prepare Supabase: run `apps/backend/supabase/schema.sql` and the migration in `apps/backend/supabase/migrations/` in the target project. Seed the demo catalog once from your local checkout with `npm run db:seed` using that project's backend environment variables. Confirm `npm run db:check` succeeds. The seed is demo content; replace it before publishing a real catalog.
 2. In Render, create a **Web Service** from this repository. Leave **Root Directory** empty. Set **Build Command** to `npm ci && npm run build -w @appscrip/backend`, **Start Command** to `npm run start -w @appscrip/backend`, and **Health Check Path** to `/health`. The root `.nvmrc` selects Node 22. Render supplies `PORT` automatically.
-3. Set these Render environment variables in its dashboard: `SUPABASE_URL` and `SUPABASE_SECRET_KEY` for the target Supabase project, plus `WEB_ORIGIN` set to the final Netlify site origin (for example, `https://your-site.netlify.app`). Keep the secret key on Render only. Once Render deploys, check `https://your-api.onrender.com/health` and `https://your-api.onrender.com/products`.
+3. Set these Render environment variables in its dashboard: `SUPABASE_URL` and `SUPABASE_SECRET_KEY` for the target Supabase project, plus `WEB_ORIGIN=https://dashing-cascaron-efc780.netlify.app`. Keep the secret key on Render only. Check `https://appscrip-server.onrender.com/health` and `https://appscrip-server.onrender.com/products`.
 4. In Netlify, import the same repository and select `apps/frontend` as the **Package directory**. Leave **Base directory** empty. The checked-in `apps/frontend/netlify.toml` sets the build command and publish directory; if Netlify asks you to enter them manually, use `npm run build -w @appscrip/frontend` and `apps/frontend/.next`. Do not enable static export.
-5. Set these Netlify environment variables in its dashboard, available to both builds and functions: `API_BASE_URL=https://your-api.onrender.com` and `SITE_URL=https://your-site.netlify.app`. Use each origin without a trailing slash. If the first deploy ran before these values were set, redeploy after setting them. Open the site, a product detail page, and submit a test newsletter address to verify the full path. If you later add a custom domain, update `SITE_URL` and `WEB_ORIGIN` and redeploy.
+5. Set these Netlify environment variables in its dashboard, available to both builds and functions: `API_BASE_URL=https://appscrip-server.onrender.com` and `SITE_URL=https://dashing-cascaron-efc780.netlify.app`. Use each origin without a trailing slash. Redeploy after changing them. Open the site, a product detail page, and submit a test newsletter address to verify the full path. If you later add a custom domain, update `SITE_URL` and `WEB_ORIGIN` and redeploy.
 
 The frontend currently gives the API eight seconds to respond. Render Free web services spin down after inactivity and may take around a minute to wake, so the first catalog request can fail on that plan. Use an always-on Render instance for reliable public traffic. The `/health` endpoint checks that the API process is running; checking `/products` also verifies the Supabase connection and catalog data.
 
@@ -71,7 +71,7 @@ The listing shows numbered page links based on the API's exact `total` count. A 
 
 The backend uses `SUPABASE_URL` and `SUPABASE_SECRET_KEY`. The publishable key and JWKS URL are unused for this app. Keep the secret key only in `apps/backend/.env` or a deployment secret manager, never in a `NEXT_PUBLIC_` variable. The browser uses Next.js; the Next.js server calls Express; Express calls Supabase. RLS is enabled on catalog and newsletter tables. The `Client` table has no public read or write policy, and the newsletter API exposes only a write action.
 
-The frontend uses `API_BASE_URL` on the Next.js server for SSR. `SITE_URL` sets canonical and Open Graph URLs. Local `.env` files are ignored by Git. Rotate any secret key shared outside a trusted secret manager and update `apps/backend/.env`.
+The frontend uses `API_BASE_URL` on the Next.js server for SSR. `SITE_URL` sets canonical, Open Graph, and JSON-LD URLs. Production defaults use the deployed Render API and Netlify site; development defaults use localhost. A localhost value in a production frontend environment is replaced with the deployed URL. Local `.env` files are ignored by Git. Rotate any secret key shared outside a trusted secret manager and update `apps/backend/.env`.
 
 ## Dependency choices
 
