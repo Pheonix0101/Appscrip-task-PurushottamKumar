@@ -1,8 +1,7 @@
 import cors from "cors";
 import express from "express";
-import { catalogRouter } from "./catalog/routes";
 import { HttpError } from "./catalog/query";
-import { newsletterRouter } from "./newsletter/routes";
+import { registerRoutes } from "./routes";
 
 export const app = express();
 
@@ -14,12 +13,7 @@ app.use(cors({
     .map((origin) => origin.trim()),
 }));
 
-app.get("/health", (_request, response) => {
-  response.json({ status: "ok" });
-});
-
-app.use(catalogRouter);
-app.use(newsletterRouter);
+registerRoutes(app);
 
 app.use((_request, _response, next) => {
   next(new HttpError(404, "NOT_FOUND", "Route not found"));

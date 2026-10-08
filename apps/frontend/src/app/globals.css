@@ -976,6 +976,67 @@ a {
   display: inline-block;
   margin-top: 20px;
 }
+.product-loading .skeleton-line,
+.product-loading .skeleton-block {
+  background: linear-gradient(100deg, #f1f1f1 20%, #fafafa 40%, #f1f1f1 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.product-loading .skeleton-line {
+  height: 16px;
+  border-radius: 4px;
+}
+.product-loading .skeleton-breadcrumb {
+  width: 42px;
+  height: 14px;
+}
+.product-loading .skeleton-breadcrumb-long {
+  width: 88px;
+}
+.skeleton-category {
+  width: 100px;
+  margin-bottom: 18px;
+}
+.product-loading .skeleton-title {
+  width: 88%;
+  height: 36px;
+  margin-bottom: 10px;
+}
+.product-loading .skeleton-title-short {
+  width: 60%;
+  height: 36px;
+}
+.product-loading .skeleton-price {
+  width: 90px;
+  height: 28px;
+  margin-top: 26px;
+}
+.product-loading-description {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+}
+.skeleton-description-short {
+  width: 70%;
+}
+.skeleton-action {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.skeleton-action-label {
+  width: 130px;
+}
+.skeleton-back-link {
+  width: 160px;
+  margin-top: 44px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-loading .skeleton-line,
+  .product-loading .skeleton-block {
+    animation: none;
+  }
+}
 @media (max-width: 1050px) {
   .filter-sidebar {
     flex-basis: 250px;
@@ -1020,6 +1081,9 @@ a {
   }
   .page-main {
     padding: 0 16px;
+  }
+  .product-page {
+    padding-bottom: 44px;
   }
   .hero {
     padding: 48px 0;

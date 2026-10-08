@@ -8,6 +8,8 @@ This npm monorepo has a React/Next.js frontend and a Node.js/Express backend. Th
 | --- | --- |
 | `apps/frontend` | Next.js App Router frontend with TypeScript |
 | `apps/backend` | Express REST API with TypeScript |
+| `apps/backend/src/routes.ts` | Central HTTP endpoint registration |
+| `apps/backend/src/catalog/handlers.ts` and `src/newsletter/handler.ts` | Request handlers that call feature services |
 | `apps/backend/supabase/schema.sql` | Catalog tables, indexes, and access setup for Supabase |
 | `apps/backend/supabase/migrations/20261008_add_client_subscriptions.sql` | Newsletter `Client` table and access rules |
 | `apps/backend/src/db/seed.ts` | Repeatable 30-product demo catalog |
@@ -24,7 +26,7 @@ Use Node.js 22.12 or later, npm, and a Supabase project. No local database servi
 5. Run `npm run db:check`, then `npm run db:seed`.
 6. Start separate terminals with `npm run dev:backend` and `npm run dev:frontend`.
 
-Visit `http://localhost:3000`. The API runs at `http://localhost:4000`. Catalog routes need the SQL setup and seed; `GET /health` checks process liveness only. The seed upserts five categories and 30 products and refreshes their images. Eighteen added products use generated demo photography, and four original demo products intentionally show “Image coming soon.” These are sample listings, not real inventory. For future schema changes, add a migration file and apply it in Supabase before using new fields in code.
+Visit `http://localhost:3000`. The API runs at `http://localhost:4000`. Catalog routes need the SQL setup and seed; `GET /health` checks process liveness only. The seed upserts five categories and 30 products and refreshes their images. Twenty-two products use generated demo photography. These are sample listings, not real inventory. For future schema changes, add a migration file and apply it in Supabase before using new fields in code.
 
 The backend development command runs without a file watcher; restart it after changing backend code.
 
