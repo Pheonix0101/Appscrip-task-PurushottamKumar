@@ -138,7 +138,7 @@ The site sets page-specific titles and descriptions, canonical URLs, Open Graph 
 
 OpenAI Codex helped implement and review parts of the API and frontend, SEO metadata, deployment configuration, and documentation. Its suggestions were checked against code and actual deployment behavior. Also used claude for varifying the SEO metaData.
 
-One AI suggestion needed correction during Netlify deployment as well as developemnt: earlier guidance treated the `.next` build output as sufficient for publishing. The site returned a 404 because a server-rendered Next.js app also needs Netlify's Next.js runtime. The project added `@netlify/plugin-nextjs` in [Netlify configuration](apps/frontend/netlify.toml); the site then served the pages.
+One AI suggestion needed correction during Netlify deployment: earlier guidance treated the `.next` build output as sufficient for publishing. The site returned a 404 because a server-rendered Next.js app also needs Netlify's Next.js runtime. The project added `@netlify/plugin-nextjs` in [Netlify configuration](apps/frontend/netlify.toml); the site then served the pages.
 
 ## Known limitations and next improvements
 
