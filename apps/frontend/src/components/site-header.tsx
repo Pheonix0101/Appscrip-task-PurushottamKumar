@@ -14,8 +14,8 @@ export function SiteHeader() {
       </div>
       <nav className="primary-nav" aria-label="Main navigation">
         <Link href="/#products">SHOP</Link>
-        <a href="/#about">ABOUT</a>
-        <a href="/#contact">CONTACT US</a>
+        <a href="#about">ABOUT</a>
+        <a href="#contact">CONTACT US</a>
       </nav>
     </header>
   </>;

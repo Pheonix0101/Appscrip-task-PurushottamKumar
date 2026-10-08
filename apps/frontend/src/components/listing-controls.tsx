@@ -23,6 +23,7 @@ export function ListingControls({ categories, facets, total, children }: { categ
   const [search, setSearch] = useState(searchParams.get("q") ?? "");
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") ?? "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") ?? "");
+  const [priceScrollTarget, setPriceScrollTarget] = useState<string | null>(null);
 
   useEffect(() => {
     setSearch(searchParams.get("q") ?? "");
@@ -30,7 +31,16 @@ export function ListingControls({ categories, facets, total, children }: { categ
     setMaxPrice(searchParams.get("maxPrice") ?? "");
   }, [searchParams]);
 
-  function navigate(changes: Record<string, string | string[] | null>) {
+  useEffect(() => {
+    if (priceScrollTarget === null || isPending || searchParams.toString() !== priceScrollTarget) return;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById("product-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setPriceScrollTarget(null);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [priceScrollTarget, isPending, searchParams]);
+
+  function navigate(changes: Record<string, string | string[] | null>, scrollToResults = false) {
     const next = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(changes)) {
       next.delete(key);
@@ -38,6 +48,7 @@ export function ListingControls({ categories, facets, total, children }: { categ
       else if (value) next.set(key, value);
     }
     next.delete("page");
+    setPriceScrollTarget(scrollToResults ? next.toString() : null);
     startTransition(() => router.push(`${pathname}${next.size ? `?${next.toString()}` : ""}`, { scroll: false }));
   }
 
@@ -53,7 +64,8 @@ export function ListingControls({ categories, facets, total, children }: { categ
 
   function submitPrice(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate({ minPrice: minPrice || null, maxPrice: maxPrice || null });
+    setMobileFilters(false);
+    navigate({ minPrice: minPrice || null, maxPrice: maxPrice || null }, true);
   }
 
   const isCustomizable = searchParams.get("customizable") === "true";

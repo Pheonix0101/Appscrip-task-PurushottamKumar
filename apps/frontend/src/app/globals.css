@@ -245,6 +245,7 @@ a {
 .product-results {
   flex: 1;
   min-width: 0;
+  scroll-margin-top: 24px;
   transition: opacity 0.2s;
 }
 .search-form {
