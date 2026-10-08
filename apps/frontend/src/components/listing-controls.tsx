@@ -57,17 +57,19 @@ export function ListingControls({ categories, facets, total, children }: { categ
   }
 
   const isCustomizable = searchParams.get("customizable") === "true";
+  const selectedSort = searchParams.get("sort") ?? "recommended";
+  const selectedSortLabel = sorts.find((sort) => sort.value === selectedSort)?.label ?? "Recommended";
 
   return <>
     <div className="listing-toolbar" id="products">
       <strong className="item-count">{total} items</strong>
       <button type="button" className="filter-toggle desktop-filter-toggle" aria-expanded={desktopFilters} aria-controls="listing-filters" onClick={() => setDesktopFilters((value) => !value)}><ChevronIcon />{desktopFilters ? "Hide filter" : "Show filter"}</button>
-      <button type="button" className="filter-toggle mobile-filter-toggle" aria-expanded={mobileFilters} aria-controls="listing-filters" onClick={() => setMobileFilters((value) => !value)}><ChevronIcon />{mobileFilters ? "Hide filter" : "Show filter"}</button>
-      <label className="sort-label">Sort by <select aria-label="Sort products" value={searchParams.get("sort") ?? "recommended"} onChange={(event) => navigate({ sort: event.target.value === "recommended" ? null : event.target.value })}>{sorts.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select><ChevronIcon /></label>
+      <button type="button" className="filter-toggle mobile-filter-toggle" aria-expanded={mobileFilters} aria-controls="listing-filters" aria-label={mobileFilters ? "Hide filters" : "Show filters"} onClick={() => setMobileFilters((value) => !value)}><ChevronIcon />Filter</button>
+      <label className="sort-label"><span className="sort-prompt">Sort by</span><select aria-label="Sort products" value={selectedSort} onChange={(event) => navigate({ sort: event.target.value === "recommended" ? null : event.target.value })}>{sorts.map((sort) => <option key={sort.value} value={sort.value}>{sort.label}</option>)}</select><span className="sort-selection" aria-hidden="true">{selectedSortLabel}</span><ChevronIcon /></label>
     </div>
     <div className={`listing-content${desktopFilters ? "" : " filters-hidden"}${mobileFilters ? " mobile-filters-open" : ""}`} aria-busy={isPending}>
       <aside className="filter-sidebar" id="listing-filters" aria-label="Product filters">
-        <form className="search-form" role="search" onSubmit={submitSearch}>
+        <form className="search-form" id="catalog-search-form" role="search" onSubmit={submitSearch}>
           <label htmlFor="catalog-search">Search products</label>
           <div className="search-field"><input id="catalog-search" type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search the collection" maxLength={100} /><button type="submit" aria-label="Search"><SearchIcon /></button></div>
         </form>

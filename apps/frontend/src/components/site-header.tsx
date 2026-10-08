@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GridMark, SearchIcon } from "./icons";
+import { ChevronIcon, GridMark, SearchIcon } from "./icons";
 
 export function SiteHeader() {
   return <>
@@ -10,7 +10,7 @@ export function SiteHeader() {
       <div className="header-main">
         <Link className="brand-mark" href="/" aria-label="mettā muse home"><GridMark /></Link>
         <Link className="brand-name" href="/">LOGO</Link>
-        <div className="header-actions"><a href="/#catalog-search" aria-label="Search products"><SearchIcon /></a><span className="header-language">ENG <span aria-hidden="true">⌄</span></span></div>
+        <div className="header-actions"><a href="/#catalog-search-form" aria-label="Search products"><SearchIcon /></a><span className="header-language">ENG <ChevronIcon /></span></div>
       </div>
       <nav className="primary-nav" aria-label="Main navigation">
         <Link href="/#products">SHOP</Link>

@@ -2,11 +2,11 @@ import Image from "next/image";
 import { NewsletterForm } from "./newsletter-form";
 
 function InstagramIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>;
+  return <svg viewBox="0 0 36 36" aria-hidden="true"><rect x="3" y="3" width="30" height="30" rx="7" fill="#fff" /><rect x="9.5" y="9.5" width="17" height="17" rx="5.5" fill="none" stroke="#000" strokeWidth="2.3" /><circle cx="18" cy="18" r="4.1" fill="none" stroke="#000" strokeWidth="2.3" /><circle cx="24.4" cy="11.7" r="1.5" fill="#000" /></svg>;
 }
 
 function LinkedInIcon() {
-  return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.2 8.5a1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 0 0 0 3.4ZM3.8 10h2.8v9H3.8v-9Zm5.2 0h2.7v1.2h.1a3 3 0 0 1 2.7-1.5c2.9 0 3.5 1.9 3.5 4.3v5h-2.8v-4.4c0-1.1 0-2.4-1.5-2.4s-1.8 1.1-1.8 2.3V19H9v-9Z" /></svg>;
+  return <svg viewBox="0 0 36 36" aria-hidden="true"><rect x="3" y="3" width="30" height="30" rx="3" fill="#fff" /><circle cx="11.1" cy="11.2" r="1.9" fill="#000" /><path fill="#000" d="M9.3 15h3.6v11.5H9.3zm5.9 0h3.5v1.6c.6-1 1.8-1.9 3.6-1.9 3.9 0 4.5 2.5 4.5 5.7v5.1h-3.6v-4.6c0-1.4 0-2.9-1.9-2.9s-2.2 1.4-2.2 2.8v4.7h-3.4z" /></svg>;
 }
 
 export function SiteFooter() {
