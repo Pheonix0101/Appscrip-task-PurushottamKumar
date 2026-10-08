@@ -1,0 +1,17 @@
+{
+  "name": "appscrip-plp",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev:frontend": "npm run dev -w @appscrip/frontend",
+    "dev:backend": "npm run dev -w @appscrip/backend",
+    "build": "npm run build -w @appscrip/backend && npm run build -w @appscrip/frontend",
+    "typecheck": "npm run typecheck -w @appscrip/backend && npm run typecheck -w @appscrip/frontend",
+    "test": "npm run test -w @appscrip/backend",
+    "db:check": "npm run db:check -w @appscrip/backend",
+    "db:seed": "npm run db:seed -w @appscrip/backend"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
