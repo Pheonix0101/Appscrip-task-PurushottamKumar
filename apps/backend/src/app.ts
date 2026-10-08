@@ -7,10 +7,15 @@ export const app = express();
 
 app.disable("x-powered-by");
 app.use(express.json({ limit: "100kb" }));
-app.use(cors({
-  origin: (process.env.WEB_ORIGIN ?? "http://localhost:3000")
+const webOrigins = new Set([
+  "https://dashing-cascaron-efc780.netlify.app",
+  ...(process.env.WEB_ORIGIN ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:3000"))
     .split(",")
-    .map((origin) => origin.trim()),
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+]);
+app.use(cors({
+  origin: [...webOrigins],
 }));
 
 registerRoutes(app);

@@ -6,6 +6,7 @@ import { CatalogApiError, getProduct } from "@/lib/catalog";
 import { ImageIcon } from "@/components/icons";
 import { WishlistButton } from "@/components/wishlist-button";
 import { productStructuredData } from "@/lib/structured-data";
+import { siteOrigin } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product.title,
       description: product.description,
       alternates: { canonical: `/products/${id}` },
-      openGraph: { title: product.title, description: product.description, images: product.images[0] ? [product.images[0].url] : [] },
+      openGraph: { title: product.title, description: product.description, url: `${siteOrigin}/products/${id}`, images: product.images[0] ? [product.images[0].url] : [] },
     };
   } catch { return { title: "Product" }; }
 }
