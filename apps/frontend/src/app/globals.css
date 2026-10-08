@@ -35,7 +35,19 @@ a{color:inherit}
 .footer-subscribe input,.footer-subscribe button{height:48px;border-radius:0}
 .footer-subscribe input{width:100%;min-width:0;border:1px solid #fff;background:#fff;color:#252020;padding:0 24px;font-size:17px;opacity:1}
 .footer-subscribe input::placeholder{color:#bfc8cd;opacity:1}
-.footer-subscribe button{border:1px solid #4d4d4d;border-radius:4px;background:#000;color:#555;font-size:16px;font-weight:700;text-transform:uppercase;cursor:not-allowed;opacity:1}
+.footer-subscribe button{border:1px solid #fff;border-radius:4px;background:#000;color:#fff;font-size:16px;font-weight:700;text-transform:uppercase;transition:background .2s,color .2s}
+.footer-subscribe button:hover:not(:disabled){background:#fff;color:#000}
+.footer-subscribe button:disabled{border-color:#777;color:#aaa;cursor:wait}
+.newsletter-notice{display:flex;align-items:flex-start;gap:12px;max-width:584px;margin-top:16px;padding:14px 16px;border:1px solid #bce8cc;border-radius:8px;background:#effbf3;color:#173c26;box-shadow:0 12px 30px #0004;animation:newsletter-appear .25s ease-out}
+.newsletter-notice-error{border-color:#f1bcb8;background:#fff1ef;color:#612823}
+.newsletter-notice-icon{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:#257f4c;color:#fff;font-size:18px;font-weight:700;line-height:1}
+.newsletter-notice-error .newsletter-notice-icon{background:#b63f37}
+.newsletter-notice-copy{display:flex;flex-direction:column;gap:3px;padding-top:1px;line-height:1.35}
+.newsletter-notice-copy strong{font-size:15px}.newsletter-notice-copy span{font-size:13px}
+.newsletter-notice-dismiss{display:grid;place-items:center;flex:none;width:28px;height:28px;margin:-2px -4px 0 auto;padding:0;border:0;background:transparent;color:inherit;font-size:23px;line-height:1}
+.newsletter-notice-dismiss:hover{opacity:.65}
+@keyframes newsletter-appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.newsletter-notice{animation:none}}
 .footer-contact a{display:block;width:fit-content;margin-top:16px;font-size:17px;line-height:1.4;text-decoration:none}
 .footer-contact a+a{margin-top:12px}
 .footer-contact a:hover,.footer-link-column a:hover{text-decoration:underline}

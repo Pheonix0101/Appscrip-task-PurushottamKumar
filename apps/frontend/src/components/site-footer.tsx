@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { NewsletterForm } from "./newsletter-form";
 
 function InstagramIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>;
@@ -14,11 +15,7 @@ export function SiteFooter() {
       <section className="footer-newsletter" aria-labelledby="footer-newsletter-title">
         <h2 id="footer-newsletter-title">Be the first to know</h2>
         <p>Sign up for updates from mettā muse.</p>
-        <form className="footer-subscribe" aria-label="Newsletter signup">
-          <label className="visually-hidden" htmlFor="footer-email">Email address</label>
-          <input id="footer-email" type="email" placeholder="Enter your e-mail..." autoComplete="email" disabled />
-          <button type="button" disabled title="Newsletter subscriptions are coming soon">Subscribe</button>
-        </form>
+        <NewsletterForm />
       </section>
       <section className="footer-contact" id="contact" aria-labelledby="footer-contact-title">
         <h2 id="footer-contact-title">Contact us</h2>
