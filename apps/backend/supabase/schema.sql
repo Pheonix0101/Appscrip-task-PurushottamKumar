@@ -1,4 +1,4 @@
--- Run once in the Supabase Dashboard SQL Editor, then run `npm run db:seed`.
+-- Run in the Supabase Dashboard SQL Editor, then run the files in migrations/ and `npm run db:seed`.
 -- This is safe to rerun for this project's existing catalog tables.
 
 begin;

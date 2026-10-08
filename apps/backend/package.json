@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test src/catalog/query.test.ts",
+    "test": "node --import tsx --test src/catalog/query.test.ts src/newsletter/validation.test.ts",
     "db:check": "node --import tsx src/db/check.ts",
     "db:seed": "node --import tsx src/db/seed.ts"
   },
